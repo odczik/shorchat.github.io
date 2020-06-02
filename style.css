@@ -1,0 +1,47 @@
+body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    font-family: sans-serif;
+}
+#message-container {
+    width: 80%;
+    max-width: 1200px;
+}
+#message-container div {
+    background-color: #CCC;
+    padding: 5px;
+}
+#message-container div:nth-child(2n) {
+    background-color: #FFF;
+}
+#message-input {
+    position: relative;
+    width: 600px;
+    height: 30px;
+    top: 90%;
+    margin-left: -70%;
+}
+#send-button {
+    position: relative;
+    width: 70px;
+    height: 36px;
+    top: 90%;
+    margin-left: -10%;
+}
+#send-container{
+    position: absolute;
+    top: 93%;
+    left: 60%;
+}
+
+#message-container{
+    display: none;
+}
+#send-container{
+    display: none;
+}
+#login{
+    display: block;
+}
