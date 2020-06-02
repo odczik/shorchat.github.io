@@ -55,9 +55,9 @@ loginButton.addEventListener("click", e => {
 })
 
 socket.on("success", nameToLogin => {
-    let name = nameToLogin
-    appendMessage(name + " joined")
-    socket.emit("new-user", name)
+    name = nameToLogin
+    appendMessage(nameToLogin + " joined")
+    socket.emit("new-user", nameToLogin)
     loginInterface.style.display = "none"
     chatInterface.style.display = "block"
     chatInterface1.style.display = "block"
