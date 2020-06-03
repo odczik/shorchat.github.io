@@ -50,7 +50,8 @@ window.addEventListener("mousemove", () => {
 messageForm.addEventListener("submit", e => {
     e.preventDefault()
     const message = messageInput.value
-    if(!message || message === undefined || message === null) return alert("You cant send blank message!")
+    const args = message.split(/ +/)
+    if(!message || message === undefined || message === null || !args) return alert("You cant send blank message!")
     appendMessage(`${name}: ${message}`)
     socket.emit("send-chat-message", message)
     messageInput.value = ""
