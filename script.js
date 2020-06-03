@@ -55,7 +55,7 @@ messageForm.addEventListener("submit", e => {
     appendMessage(`${name}: ${message}`)
     socket.emit("send-chat-message", message)
     messageInput.value = ""
-    socket.emit("update-users-online", nameToLogin)
+    socket.emit("update-users-online", name)
     socket.emit("show-users")
 })
 
