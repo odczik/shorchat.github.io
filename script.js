@@ -43,7 +43,7 @@ window.addEventListener("unload", () => {
     socket.emit("update-users-offline", name)
 })
 window.addEventListener("mousemove", () => {
-    socket.emit("update-users-online", nameToLogin)
+    socket.emit("update-users-online", name)
     socket.emit("show-users")
 })
 
