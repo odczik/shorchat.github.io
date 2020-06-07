@@ -2,6 +2,8 @@ const socket = io("https://alterchatserver.herokuapp.com")
 const messageContainer = document.getElementById("message-container")
 const messageForm = document.getElementById("send-container")
 const messageInput = document.getElementById("message-input")
+const sendButton = document.getElementById("send-button")
+const imageButton = document.getElementById("image-button")
 
 const usernameInput = document.getElementById("usernameInput")
 const passwordInput = document.getElementById("passwordInput")
@@ -16,13 +18,19 @@ const odczik = document.getElementById("odczik")
 const pythonprogrammer = document.getElementById("python-programmer")
 const Fox = document.getElementById("Fox")
 const dominikbubu = document.getElementById("dominikbubu")
+const userCountElement = document.getElementById("userCount")
 
 let name
+
+let userCount
 
 const userButton = document.getElementById("users-button")
 
 socket.on("chat-message", data => {
     appendMessage(`${data.name}: ${data.message}`)
+})
+socket.on("chat-image", data => {
+    appendImage(data)
 })
 
 socket.on("user-connected", name => {
@@ -47,13 +55,68 @@ window.addEventListener("mousemove", () => {
     socket.emit("show-users")
 })
 
-messageForm.addEventListener("submit", e => {
+window.addEventListener("keydown", () => {
+    messageInput.focus()
+})
+
+sendButton.addEventListener("click", e => {
     e.preventDefault()
     const message = messageInput.value
     const args = message.split(/ +/)
     if(!message || message === undefined || message === null || !args) return alert("You cant send blank message!")
+    if(!name || name === undefined || name === null) return location.reload()
+    // chat commands
+    if(message.startsWith("/")){
+        commands(message)
+        messageInput.value = ""
+        return
+    }
     appendMessage(`${name}: ${message}`)
     socket.emit("send-chat-message", message)
+    messageInput.value = ""
+    socket.emit("update-users-online", name)
+    socket.emit("show-users")
+})
+
+function commands(message){
+    const args = message.split(/ +/)
+    if(message.startsWith("/kick")){
+        if(!args[1]) return
+        let data = {
+            name: name,
+            toKick: args[1]
+        }
+        socket.emit("kick-user", data)
+    } else if(message.startsWith("/server")){
+        if(!args[1]) return
+        let message1 = message.split("8")
+        let data = {
+            name: name,
+            message: message1
+        }
+        socket.emit("server-message", data)
+    } else {
+        alert("This command doesnt exist!")
+    }
+}
+socket.on("kick-user-name", data => {
+    if(!data.toKick === name) return
+    location.reload()
+})
+
+imageButton.addEventListener("click", e => {
+    e.preventDefault()
+
+    const image = messageInput.value
+    const args = image.split(/ +/)
+    if(!image || image === undefined || image === null || !args) return alert("You cant send blank message!")
+    if(!name || name === undefined || name === null) return location.reload()
+    let data = {
+        name: name,
+        image: image
+    }
+    appendImage(data)
+    socket.emit("send-chat-image", data)
     messageInput.value = ""
     socket.emit("update-users-online", name)
     socket.emit("show-users")
@@ -63,6 +126,28 @@ function appendMessage(message) {
     const messageElement = document.createElement("div")
     messageElement.innerText = message
     messageContainer.append(messageElement)
+    messageContainer.scrollTop = messageContainer.scrollHeight
+}
+function appendImage(data) {
+    const messageElement = document.createElement("div")
+    messageElement.innerHTML = data.name + ": "
+    messageContainer.append(messageElement)
+
+    const messageElement2 = document.createElement("a")
+    messageElement2.innerHTML = data.image
+    messageElement2.href = data.image
+    messageElement.append(messageElement2)
+
+    const messageElement1 = document.createElement("img")
+    messageElement1.src = data.image
+    if(data.image.height > "100" || data.image.width > "200"){
+        console.log("hey")
+        let imgHeight = messageElement1.height / 2
+        let imgWidth = messageElement1.width / 2
+        messageElement1.height = imgHeight
+        messageElement1.width = imgWidth
+    }
+    messageElement.append(messageElement1)
     messageContainer.scrollTop = messageContainer.scrollHeight
 }
 function appendUser(username) {
@@ -133,4 +218,7 @@ socket.on("users", data => {
     const dominikbubu1 = document.getElementById("dominikbubu1")
     if(data["dominikbubu"] === "online") { dominikbubu1.style.color = "green" }
     if(data["dominikbubu"] === "offline") { dominikbubu1.style.color = "red" }
+
+    userCount = data.userCount
+    userCountElement.innerHTML = `User Count: <b>${userCount}</b>`
 })

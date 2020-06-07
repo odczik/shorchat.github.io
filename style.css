@@ -54,14 +54,16 @@ body {
     margin-left: -70%;
     outline: none;
 }
-#send-button {
+.send-buttons {
     position: relative;
     width: 70px;
     height: 36px;
     top: 90%;
-    margin-left: -10%;
+    margin-left: 0%;
     outline: none;
+    margin: 1px;
 }
+
 #send-container{
     position: absolute;
     top: 93%;
