@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AlterChat</title>
-    <script src="https://smtpjs.com/v3/smtp.js"></script>
     <script defer src="https://alterchatserver.herokuapp.com/socket.io/socket.io.js"></script>
-    <script defer src="./scripts/script.js"></script>
-    <script defer src="./scripts/register.js"></script>
+    <script defer src="script.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,7 +14,7 @@
         <div id="python-programmer">python programmer <b id="python-programmer1">offline</b></div>
         <div id="Fox">Fox <b id="Fox1">offline</b></div>
         <div id="dominikbubu">dominikbubu <b id="dominikbubu1">offline</b></div>
-        <!--<div id="userCount">Users online: <b>null</b></div>-->
+        <div id="userCount">Users online: <b>null</b></div>
     </div>
 
     <div id="message-container"></div>
@@ -30,17 +28,9 @@
     <div id="login">
         <form>
             <h1>Login</h1>
-            <input type="text" placeholder="Username" name="" id="usernameInput" required>
-            <input type="password" placeholder="Password" name="" id="passwordInput" required>
+            <input type="text" placeholder="Username" name="" id="usernameInput">
+            <input type="password" placeholder="Password" name="" id="passwordInput">
             <button type="button" id="loginButton">Login</button>
-        </form>
-
-        <form>
-            <h1>Register</h1>
-            <input type="text" placeholder="Username" name="" id="usernameInputRegister" required>
-            <input type="email" placeholder="Email" name="" id="emailInputRegister" required>
-            <input type="password" placeholder="Password" name="" id="passwordInputRegister" required>
-            <button type="button" id="registerButton">Register</button>
         </form>
     </div>
 
