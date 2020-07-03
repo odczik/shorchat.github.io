@@ -196,7 +196,7 @@ socket.on("confirm-email", data => {
     //1629e632-0870-4da4-be26-d98b1692ea8d
 
     Email.send({
-        SecureToken : "7b27036f-c423-4034-ae06-014cf893e964",
+        SecureToken : "fc8e24fa-1d74-459e-bbed-58158a59492f",
         To : data.email,
         From : "alterconfirmemail@gmail.com",
         Subject : "Confirmation Email",
@@ -211,6 +211,7 @@ socket.on("confirm-email", data => {
     usernameInputRegister.style.display = "none"
     passwordInputRegister.style.display = "none"
     emailInputRegister.style.display = "none"
+    registerButton.style.display = "none"
     alert("Your confirmation token has been sent to: " + data.email)
     let enteredToken
     tokenButton.addEventListener("click", e => {
