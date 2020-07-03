@@ -193,7 +193,6 @@ socket.on("success", nameToLogin => {
 })
 
 socket.on("confirm-email", data => {
-    //7b27036f-c423-4034-ae06-014cf893e964
 
     Email.send({
         SecureToken : "7b27036f-c423-4034-ae06-014cf893e964",
@@ -206,10 +205,7 @@ socket.on("confirm-email", data => {
     );
     let enteredToken = prompt("Your confirmation token has been sent to: " + data.email)
     if(enteredToken === data.token){
-        let saveData = {
-
-        }
-        socket.emit("email-confirmed", saveData)
+        socket.emit("email-confirmed", data)
     }
 })
 
