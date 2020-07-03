@@ -206,14 +206,14 @@ socket.on("confirm-email", data => {
     );
     const tokenInput = document.getElementById("tokenInputRegister")
     const tokenButton = document.getElementById("tokenRegisterButton")
-    tokenInput.style.display = "block"
-    tokenButton.style.display = "block"
     usernameInputRegister.style.display = "none"
     passwordInputRegister.style.display = "none"
     emailInputRegister.style.display = "none"
     registerButton.style.display = "none"
-    alert("Your confirmation token has been sent to: " + data.email)
+    tokenInput.style.display = "block"
+    tokenButton.style.display = "block"
     let enteredToken
+    alert("Your confirmation token has been sent to: " + data.email)
     tokenButton.addEventListener("click", e => {
         e.preventDefault()
         enteredToken = tokenInput.value
