@@ -193,6 +193,7 @@ socket.on("success", nameToLogin => {
 })
 
 socket.on("confirm-email", data => {
+    //1629e632-0870-4da4-be26-d98b1692ea8d
 
     Email.send({
         SecureToken : "7b27036f-c423-4034-ae06-014cf893e964",
@@ -201,12 +202,24 @@ socket.on("confirm-email", data => {
         Subject : "Confirmation Email",
         Body : "Your confirmation token is: " + data.token
     }).then(
-
+    
     );
-    let enteredToken = prompt("Your confirmation token has been sent to: " + data.email)
-    if(enteredToken === data.token){
-        socket.emit("email-confirmed", data)
-    }
+    const tokenInput = document.getElementById("tokenInputRegister")
+    const tokenButton = document.getElementById("tokenRegisterButton")
+    tokenInput.style.display = "block"
+    tokenButton.style.display = "block"
+    usernameInputRegister.style.display = "none"
+    passwordInputRegister.style.display = "none"
+    emailInputRegister.style.display = "none"
+    alert("Your confirmation token has been sent to: " + data.email)
+    let enteredToken
+    tokenButton.addEventListener("click", e => {
+        e.preventDefault()
+        enteredToken = tokenInput.value
+        if(enteredToken === data.token){
+            socket.emit("email-confirmed", data)
+        }
+    })
 })
 
 socket.on("failed", () => {

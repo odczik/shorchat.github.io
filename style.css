@@ -82,3 +82,10 @@ body {
 #login{
     display: block;
 }
+
+#tokenInputRegister{
+    display: none;
+}
+#tokenRegisterButton{
+    display: none;
+}
