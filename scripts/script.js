@@ -39,23 +39,16 @@ socket.on("chat-image", data => {
 socket.on("user-connected", name => {
     if(!name || name === undefined || name === null) return
     appendMessage(`${name} Connected`)
-    //appendUser(name)
-    socket.emit("show-users")
 })
 
 socket.on("user-disconnected", name => {
     if(!name || name === undefined || name === null) return
     appendMessage(`${name} Disconnected`)
-    //delUser(name)
-    socket.emit("show-users")
 })
-
-window.addEventListener("unload", () => {
-    socket.emit("update-users-offline", name)
-})
-window.addEventListener("mousemove", () => {
-    socket.emit("update-users-online", name)
-    socket.emit("show-users")
+window.addEventListener("load", () => {
+    setInterval(function(){
+        socket.emit("show-users")
+    }, 100)
 })
 
 window.addEventListener("keydown", () => {
@@ -78,7 +71,6 @@ sendButton.addEventListener("click", e => {
     socket.emit("send-chat-message", message)
     messageInput.value = ""
     socket.emit("update-users-online", name)
-    socket.emit("show-users")
 })
 
 function commands(message){
@@ -122,7 +114,6 @@ imageButton.addEventListener("click", e => {
     socket.emit("send-chat-image", data)
     messageInput.value = ""
     socket.emit("update-users-online", name)
-    socket.emit("show-users")
 })
 
 function appendMessage(message) {
@@ -189,21 +180,9 @@ socket.on("success", nameToLogin => {
     chatInterface1.style.display = "block"
     usersContainer.style.display = "block"
     socket.emit("update-users-online", nameToLogin)
-    socket.emit("show-users")
 })
 
 socket.on("confirm-email", data => {
-    //1629e632-0870-4da4-be26-d98b1692ea8d
-
-    Email.send({
-        SecureToken : "fc8e24fa-1d74-459e-bbed-58158a59492f",
-        To : data.email,
-        From : "alterconfirmemail@gmail.com",
-        Subject : "Confirmation Email",
-        Body : "Your confirmation token is: " + data.token
-    }).then(
-    
-    );
     const tokenInput = document.getElementById("tokenInputRegister")
     const tokenButton = document.getElementById("tokenRegisterButton")
     usernameInputRegister.style.display = "none"
@@ -219,6 +198,8 @@ socket.on("confirm-email", data => {
         enteredToken = tokenInput.value
         if(enteredToken === data.token){
             socket.emit("email-confirmed", data)
+        } else {
+            alert("Token is not valid.")
         }
     })
 })
@@ -239,32 +220,21 @@ socket.on("emailExists", () => {
     alert("User With This Email Already Exists!")
 })
 
+socket.on("successfully-registered", () => {
+    alert("Successfully registered! You can now login.")
+})
+
+socket.on("alert", msg => {
+    alert(msg)
+})
+
 userButton.addEventListener("click", e => {
     e.preventDefault()
-    socket.emit("show-users")
 })
 
 socket.on("users", data => {
-    odczik.innerHTML = "odczik" + ` <b id="odczik1">${data["odczik"]}</b>`
-    const odczik1 = document.getElementById("odczik1")
-    if(data["odczik"] === "online") { odczik1.style.color = "green" }
-    if(data["odczik"] === "offline") { odczik1.style.color = "red" }
-
-    pythonprogrammer.innerHTML = "python programmer" + ` <b id="python-programmer1">${data["python programmer"]}</b>`
-    const pythonprogrammer1 = document.getElementById("python-programmer1")
-    if(data["python programmer"] === "online") { pythonprogrammer1.style.color = "green" }
-    if(data["python programmer"] === "offline") { pythonprogrammer1.style.color = "red" }
-
-    Fox.innerHTML = "Fox" + ` <b id="Fox1">${data["Fox"]}</b>`
-    const Fox1 = document.getElementById("Fox1")
-    if(data["Fox"] === "online") { Fox1.style.color = "green" }
-    if(data["Fox"] === "offline") { Fox1.style.color = "red" }
-
-    dominikbubu.innerHTML = "dominikbubu" + ` <b id="dominikbubu1">${data["dominikbubu"]}</b>`
-    const dominikbubu1 = document.getElementById("dominikbubu1")
-    if(data["dominikbubu"] === "online") { dominikbubu1.style.color = "green" }
-    if(data["dominikbubu"] === "offline") { dominikbubu1.style.color = "red" }
-
-    userCount = data.userCount
-    //userCountElement.innerHTML = `User Count: <b>${userCount}</b>`
+    for (let i = 0; i < data.ids.length; i++) {
+        //if(!data.users[i]) return
+        console.log(data)
+    }
 })
