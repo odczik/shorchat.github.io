@@ -235,6 +235,6 @@ userButton.addEventListener("click", e => {
 socket.on("users", data => {
     for (let i = 0; i < data.ids.length; i++) {
         //if(!data.users[i]) return
-        console.log(data)
+        //console.log(data)
     }
 })
