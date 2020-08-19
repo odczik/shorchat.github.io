@@ -21,6 +21,7 @@ const dominikbubu = document.getElementById("dominikbubu")
 const userCountElement = document.getElementById("userCount")
 
 let name
+let token
 let userId
 
 let userCount
@@ -38,13 +39,27 @@ socket.on("chat-image", data => {
 
 socket.on("user-connected", name => {
     if(!name || name === undefined || name === null) return
-    appendMessage(`${name} Connected`)
+    addUser(name)
+    //appendMessage(`${name} Connected`)
 })
+function addUser(name){
+    let userElement = document.createElement("div")
+    userElement.setAttribute("id", name + "_user")
+    userElement.innerText = name
+    userElement.style.color = "#44bf3b"
+    usersContainer.append(userElement)
+    usersContainer.scrollTop = usersContainer.scrollHeight
+}
 
 socket.on("user-disconnected", name => {
     if(!name || name === undefined || name === null) return
-    appendMessage(`${name} Disconnected`)
+    removeUser(name)
+    //appendMessage(`${name} Disconnected`)
 })
+function removeUser(name){
+    let userElement = document.getElementById(name + "_user")
+    userElement.parentNode.removeChild(userElement)
+}
 window.addEventListener("load", () => {
     setInterval(function(){
         socket.emit("show-users")
@@ -67,8 +82,12 @@ sendButton.addEventListener("click", e => {
         messageInput.value = ""
         return
     }
+    let data = {
+        message: message,
+        token: token
+    }
     appendMessage(`${name}: ${message}`)
-    socket.emit("send-chat-message", message)
+    socket.emit("send-chat-message", data)
     messageInput.value = ""
     socket.emit("update-users-online", name)
 })
@@ -135,7 +154,6 @@ function appendImage(data) {
     const messageElement1 = document.createElement("img")
     messageElement1.src = data.image
     if(data.image.height > "100" || data.image.width > "200"){
-        console.log("hey")
         let imgHeight = messageElement1.height / 2
         let imgWidth = messageElement1.width / 2
         messageElement1.height = imgHeight
@@ -143,16 +161,6 @@ function appendImage(data) {
     }
     messageElement.append(messageElement1)
     messageContainer.scrollTop = messageContainer.scrollHeight
-}
-function appendUser(username) {
-    const messageElement = document.createElement("div")
-    messageElement.innerText = username
-    messageElement.id = username
-    usersContainer.append(messageElement)
-}
-function delUser(username) {
-    const messageElement = document.getElementById(username)
-    messageElement.remove()
 }
 
 loginButton.addEventListener("click", e => {
@@ -170,16 +178,18 @@ loginButton.addEventListener("click", e => {
     passwordInput.value = ""
 })
 
-socket.on("success", nameToLogin => {
-    appendMessage(nameToLogin + " joined")
-    socket.emit("new-user", nameToLogin)
-    name = nameToLogin
-    //currentUser.innerHTML = nameToLogin + "<b> offline</b>"
+socket.on("success", data => {
+    //appendMessage(nameToLogin + " joined")
+    addUser(data.name)
+    socket.emit("new-user", data.name)
+    name = data.name
+    token = data.token
+    //currentUser.innerHTML = data.name + "<b> offline</b>"
     loginInterface.style.display = "none"
     chatInterface.style.display = "block"
     chatInterface1.style.display = "block"
     usersContainer.style.display = "block"
-    socket.emit("update-users-online", nameToLogin)
+    socket.emit("update-users-online", data.name)
 })
 
 socket.on("confirm-email", data => {
@@ -196,7 +206,7 @@ socket.on("confirm-email", data => {
     tokenButton.addEventListener("click", e => {
         e.preventDefault()
         enteredToken = tokenInput.value
-        if(enteredToken === data.token){
+        if(enteredToken === data.confToken){
             socket.emit("email-confirmed", data)
         } else {
             alert("Token is not valid.")
@@ -233,8 +243,5 @@ userButton.addEventListener("click", e => {
 })
 
 socket.on("users", data => {
-    for (let i = 0; i < data.ids.length; i++) {
-        //if(!data.users[i]) return
-        //console.log(data)
-    }
+    
 })
