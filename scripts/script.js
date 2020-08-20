@@ -14,11 +14,7 @@ const chatInterface1 = document.getElementById("message-container")
 const loginInterface = document.getElementById("login")
 
 const usersContainer = document.getElementById("users-container")
-const odczik = document.getElementById("odczik")
-const pythonprogrammer = document.getElementById("python-programmer")
-const Fox = document.getElementById("Fox")
-const dominikbubu = document.getElementById("dominikbubu")
-const userCountElement = document.getElementById("userCount")
+const usersOnlineNum = document.getElementById("usersOnlineNum")
 
 let name
 let token
@@ -37,29 +33,31 @@ socket.on("chat-image", data => {
     appendImage(data)
 })
 
-socket.on("user-connected", name => {
-    if(!name || name === undefined || name === null) return
-    addUser(name)
-    //appendMessage(`${name} Connected`)
+socket.on("user-connected", data => {
+    if(!data.name || data.name === undefined || data.name === null) return
+    console.log(data.usersOnline)
+    updateUsers(data.usersOnline)
+    //appendMessage(`${data.name} Connected`)
 })
-function addUser(name){
-    let userElement = document.createElement("div")
-    userElement.setAttribute("id", name + "_user")
-    userElement.innerText = name
-    userElement.style.color = "#44bf3b"
-    usersContainer.append(userElement)
-    usersContainer.scrollTop = usersContainer.scrollHeight
+
+function updateUsers(users){
+    console.log(users)
+    document.querySelectorAll('.usersOnlineList').forEach(function(a) {
+        a.remove()
+    })
+    usersOnlineNum.innerText = users.length
+    users.forEach(user => {
+        let userElement = document.createElement("div")
+        userElement.innerText = user
+        userElement.classList.add("usersOnlineList")
+        usersContainer.appendChild(userElement)
+    });
 }
 
-socket.on("user-disconnected", name => {
-    if(!name || name === undefined || name === null) return
-    removeUser(name)
-    //appendMessage(`${name} Disconnected`)
+socket.on("user-disconnected", data => {
+    if(!data.name || data.name === undefined || data.name === null) return
+    //appendMessage(`${data.name} Disconnected`)
 })
-function removeUser(name){
-    let userElement = document.getElementById(name + "_user")
-    userElement.parentNode.removeChild(userElement)
-}
 window.addEventListener("load", () => {
     setInterval(function(){
         socket.emit("show-users")
@@ -181,7 +179,7 @@ loginButton.addEventListener("click", e => {
 socket.on("success", data => {
     document.title = "ShorChat"
     //appendMessage(nameToLogin + " joined")
-    addUser(data.name)
+    updateUsers(data.usersOnline)
     socket.emit("new-user", data.name)
     name = data.name
     token = data.token
@@ -233,6 +231,7 @@ socket.on("emailExists", () => {
 
 socket.on("successfully-registered", () => {
     alert("Successfully registered! You can now login.")
+    location.reload()
 })
 
 socket.on("alert", msg => {
@@ -243,6 +242,6 @@ userButton.addEventListener("click", e => {
     e.preventDefault()
 })
 
-socket.on("users", data => {
-    
+socket.on("users", users => {
+    updateUsers(users)
 })
