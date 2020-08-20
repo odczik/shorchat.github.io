@@ -1,4 +1,4 @@
-const socket = io("https://alterchatserver.herokuapp.com")
+const socket = io("https://shorchatserver.herokuapp.com")
 const messageContainer = document.getElementById("message-container")
 const messageForm = document.getElementById("send-container")
 const messageInput = document.getElementById("message-input")
@@ -179,6 +179,7 @@ loginButton.addEventListener("click", e => {
 })
 
 socket.on("success", data => {
+    document.title = "ShorChat"
     //appendMessage(nameToLogin + " joined")
     addUser(data.name)
     socket.emit("new-user", data.name)

@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlterChat</title>
-    <script src="https://smtpjs.com/v3/smtp.js"></script>
-    <script defer src="https://alterchatserver.herokuapp.com/socket.io/socket.io.js"></script>
+    <title>ShorChat</title>
+    <link rel="shortcut icon" href="ShorChatLogo_Small.png" type="image/icon type" />
+    <script defer src="https://shorchatserver.herokuapp.com/socket.io/socket.io.js"></script>
     <script defer src="./scripts/script.js"></script>
     <script defer src="./scripts/register.js"></script>
+    <script defer src="./scripts/script-login_register.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-login_register.css">
 </head>
 <body>
     <div id="users-container">
@@ -24,22 +26,34 @@
     </form>
     
     <div id="login">
-        <form>
-            <h1>Login</h1>
-            <input type="text" placeholder="Username" name="" id="usernameInput" required>
-            <input type="password" placeholder="Password" name="" id="passwordInput" required>
-            <button type="button" id="loginButton">Login</button>
-        </form>
+        <div id="main-page">
+            <img class="main-logo" src="./ShorChatLogo_Full.png" alt="ShorChat Logo">
+            <button class="btn-login_register1" id="showLogin-btn"><b>Login</b></button>
+            <button class="btn-login_register1" id="showRegister-btn"><b>Register</b></button>
+        </div>
 
-        <form>
-            <h1>Register</h1>
-            <input type="text" placeholder="Username" name="" id="usernameInputRegister" required>
-            <input type="email" placeholder="Email" name="" id="emailInputRegister" required>
-            <input type="password" placeholder="Password" name="" id="passwordInputRegister" required>
-            <button type="button" id="registerButton">Register</button>
-            <input type="text" placeholder="Token" name="" id="tokenInputRegister" required style="width: 100%;">
-            <button type="button" id="tokenRegisterButton">Confirm Register</button>
-        </form>
+        <div id="form-login">
+            <form>
+                <h1>Login</h1>
+                <input type="text" placeholder="Username" name="" id="usernameInput" required>
+                <input type="password" placeholder="Password" name="" id="passwordInput" required>
+                <button type="button" id="loginButton">Login</button>
+            </form>
+            <button class="btn-login_register" onclick="location.reload()">Back</button>
+        </div>
+
+        <div id="form-register">
+            <form autocomplete="off">
+                <h1>Register</h1>
+                <input type="text" placeholder="Username" name="" id="usernameInputRegister" required>
+                <input type="email" placeholder="Email" name="" id="emailInputRegister" required>
+                <input type="password" placeholder="Password" name="" id="passwordInputRegister" required>
+                <button type="button" id="registerButton">Register</button>
+                <input type="text" placeholder="Token" name="" id="tokenInputRegister" required style="width: 100%;">
+                <button type="button" id="tokenRegisterButton">Confirm Register</button>
+            </form>
+            <button class="btn-login_register" onclick="location.reload()">Back</button>
+        </div>
     </div>
 
 <script>
