@@ -35,13 +35,11 @@ socket.on("chat-image", data => {
 
 socket.on("user-connected", data => {
     if(!data.name || data.name === undefined || data.name === null) return
-    console.log(data.usersOnline)
     updateUsers(data.usersOnline)
     //appendMessage(`${data.name} Connected`)
 })
 
 function updateUsers(users){
-    console.log(users)
     document.querySelectorAll('.usersOnlineList').forEach(function(a) {
         a.remove()
     })
