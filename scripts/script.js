@@ -28,10 +28,23 @@ const userButton = document.getElementById("users-button")
 
 socket.on("chat-message", data => {
     appendMessage(`${data.name}: ${data.message}`)
+    isFocused()
 })
 socket.on("chat-image", data => {
     appendImage(data)
+    isFocused()
 })
+
+function isFocused() {
+    if (document.hasFocus()) {
+        return
+    } else {
+        if(!name || name === undefined || name === null) return
+        const msgSound = new Audio("../newMsgSound.wav")
+        msgSound.volume = "0.3"
+        msgSound.play()
+    }
+}
 
 socket.on("user-connected", data => {
     if(!data.name || data.name === undefined || data.name === null) return
@@ -68,7 +81,7 @@ window.addEventListener("keydown", () => {
 
 sendButton.addEventListener("click", e => {
     e.preventDefault()
-    const message = messageInput.value
+    let message = removeTags(messageInput.value)
     const args = message.split(/ +/)
     if(!message || message === undefined || message === null || !args) return alert("You cant send blank message!")
     if(!name || name === undefined || name === null) return location.reload()
@@ -78,15 +91,31 @@ sendButton.addEventListener("click", e => {
         messageInput.value = ""
         return
     }
+    let finalMsg = ""
+    args.forEach(arg => {
+        if(arg.startsWith("https://") || arg.startsWith("http://")){
+            finalMsg = `${finalMsg} <a href="${arg}">${arg}</a>`
+        } else {
+            finalMsg = `${finalMsg} ${arg}`
+        }
+    })
     let data = {
-        message: message,
+        message: finalMsg,
         token: token
     }
-    appendMessage(`${name}: ${message}`)
+    appendMessage(`${name}: ${finalMsg}`)
     socket.emit("send-chat-message", data)
     messageInput.value = ""
     socket.emit("update-users-online", name)
 })
+function removeTags(str)
+{
+   if ((str===null) || (str===''))
+       return false;
+  else
+   str = str.toString();
+  return str.replace(/<[^>]*>/g, '');
+}
 
 function commands(message){
     const args = message.split(/ +/)
@@ -133,7 +162,7 @@ imageButton.addEventListener("click", e => {
 
 function appendMessage(message) {
     const messageElement = document.createElement("div")
-    messageElement.innerText = message
+    messageElement.innerHTML = message
     messageContainer.append(messageElement)
     messageContainer.scrollTop = messageContainer.scrollHeight
 }
