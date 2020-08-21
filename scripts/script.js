@@ -122,7 +122,7 @@ function commands(message){
     if(message.startsWith("/kick")){
         if(!args[1]) return
         let data = {
-            name: name,
+            token: token,
             toKick: args[1]
         }
         socket.emit("kick-user", data)
@@ -130,7 +130,7 @@ function commands(message){
         if(!args[1]) return
         let message1 = message.split("8")
         let data = {
-            name: name,
+            token: token,
             message: message1
         }
         socket.emit("server-message", data)
